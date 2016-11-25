@@ -66,15 +66,50 @@ Pipelining uses [Hoek.reach](https://www.npmjs.com/package/hoek#reach-obj-chain-
 
 -- 
 
-You can use a similar approach when you expect and array response from a request. For example if you are using paging for the query and want to expand the results returned.
+You can use a similar approach when you expect an array response from or within a request. For example if you are using paging for the query and want to expand the results returned.
 
-In this request the `#0.id` instructs the pipeline to apply to each element returned from the first response. Correspondingly the second element of the response will be an array containing the number of elements returned from the query.
+In this request the `#0.id` instructs the pipeline to apply to each element returned from the first response. Correspondingly the second element of the response will be an array containing the number of elements returned from the first query.
 
 ```json
 { "requests": [
     {"method": "get", "path": "/users", "query": { "search": "John", "page": "1", "size": "25" }},
     {"method": "get", "path": "/users/#0.id/profile"}
 ] }
+```
+
+This can also be used, in combination with the `$` pipelining, to reach into the response. For example, if you want to expand an array contained within the structure of a response.
+
+```json
+// Order
+{
+    "orderId": "abc123",
+    ...
+    "orderLines": [
+        "line-abc123-1",
+        "line-abc123-2",
+        ...
+    ],
+    ...
+}       
+```
+
+The order line items can be retrieved in their full form via the `#` mechanism.
+
+
+```json
+{ "requests": [
+    {"method": "get", "path": "/orders/latest"},
+    {"method": "get", "path": "/orders/$0.orderId/orderLines/#orderLines"}
+] }
+```
+
+Or if the array contains more structured elements, the following would also work.
+```/orders/abc123/orderLines/#orderLines.orderLineId```
+
+As you would expect, the structure containing the array of the exanded elements is returned in the correct position in the response according to the request.
+
+```json
+[{"orderId": "abc123", ... }, [{"orderLineId": "line-abc123-1", ... }, ... ]]
 ```
 
 --
