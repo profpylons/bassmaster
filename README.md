@@ -104,7 +104,7 @@ The order line items can be retrieved in their full form via the `#` mechanism.
 ```
 
 Or if the array contains more structured elements, the following would also work.
-```/orders/abc123/orderLines/#orderLines.orderLineId```
+`/orders/abc123/orderLines/#orderLines.orderLineId`
 
 As you would expect, the structure containing the array of the exanded elements is returned in the correct position in the response according to the request.
 
