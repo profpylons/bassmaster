@@ -29,6 +29,31 @@ const itemHandler = function (request, reply) {
     });
 };
 
+const deepItemHandler = function (request, reply) {
+
+    return reply({
+        'id': '55cf687663',
+        'name': 'Deep Item',
+        'inner': {
+            'name': 'Level 1',
+            'inner': {
+                'name': 'Level 2',
+                'inner': {
+                    'name': 'Level 3',
+                    'array': [
+                        {
+                            'name': 'Array Item 0'
+                        },
+                        {
+                            'name': 'Array Item 1'
+                        }
+                    ]
+                }
+            }
+        }
+    });
+};
+
 const item2Handler = function (request, reply) {
 
     return reply({
@@ -97,6 +122,15 @@ const redirectHandler = function (request, reply) {
     return reply().redirect('/profile');
 };
 
+const interestingIdsHandler = function (request, reply) {
+
+    return reply({
+        'idWithDash': '55cf-687663-55cf687663',
+        'idLikeFilename': '55cf687663.png',
+        'idLikeFileNameWithDash': '55cf-687663-55cf687663.png'
+    });
+};
+
 const fetch1 = function (request, next) {
 
     next('Hello');
@@ -149,6 +183,7 @@ module.exports.setupServer = function (done) {
         { method: 'PUT', path: '/echo', handler: echoHandler },
         { method: 'GET', path: '/profile', handler: profileHandler },
         { method: 'GET', path: '/item', handler: activeItemHandler },
+        { method: 'GET', path: '/deepItem', handler: deepItemHandler },
         { method: 'GET', path: '/array', handler: arrayHandler },
         { method: 'GET', path: '/item/{id}', handler: itemHandler },
         { method: 'GET', path: '/item2/{id?}', handler: item2Handler },
@@ -156,6 +191,7 @@ module.exports.setupServer = function (done) {
         { method: 'GET', path: '/int', handler: integerHandler },
         { method: 'GET', path: '/int/{id}', handler: integerItemHandler },
         { method: 'GET', path: '/string', handler: stringItemHandler },
+        { method: 'GET', path: '/interestingIds', handler: interestingIdsHandler },
         { method: 'GET', path: '/error', handler: errorHandler },
         { method: 'GET', path: '/badchar', handler: badCharHandler },
         { method: 'GET', path: '/badvalue', handler: badValueHandler },
